@@ -1,4 +1,3 @@
-```markdown
 # 🧠 Depression Detection from DAIC-WOZ Conversations
 
 This project aims to detect depression in participants using the DAIC-WOZ dataset by analyzing emotional and semantic features extracted from interview transcripts. The project is divided into two main phases:
@@ -77,4 +76,4 @@ pip install -r requirements.txt
 
 > ⚠️ **Ethics Note**: This project is for academic/research use only. It is not a substitute for clinical diagnosis or treatment.
 
-```
+---
