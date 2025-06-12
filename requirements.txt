@@ -1,0 +1,6 @@
+pandas
+nltk
+empath
+matplotlib
+seaborn
+scikit-learn
