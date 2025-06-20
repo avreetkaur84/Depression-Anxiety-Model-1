@@ -26,7 +26,7 @@ for file in clean_text_folder.glob("*_TRANSCRIPT_clean.txt"):
 
         for i, (text, embed) in enumerate(zip(lines, embeddings)):
             all_metadata.append({
-                "participant_id": participant_id,
+                "participant_id": participant_id+"_TRANSCRIPT",
                 "sentence_id": i,
                 "text": text
             })

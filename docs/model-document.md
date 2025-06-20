@@ -71,3 +71,11 @@ Use:
 * SHAP values for interpretability
 
 --
+
+| Step      | Action                             | Why It Helps                           |
+| --------- | ---------------------------------- | -------------------------------------- |
+| ✅ Step 1 | Already done                       | Dataset cleaned, features extracted    |
+| 🔥 Step 2 | Apply Feature Scaling              | Improves model learning stability      |
+| 🚀 Step 3 | Try Better Models                  | SVM, LightGBM, Logistic (L2), Ensemble |
+| 📊 Step 4 | Evaluate using Stratified KFold    | Stable performance estimation          |
+| 🧠 Step 5 | Choose best model + report metrics | For paper results section              |
