@@ -1,79 +1,138 @@
-# 🧠 Depression Detection from DAIC-WOZ Conversations
+# 🧠 Transcript-Based Mental Health Screening App
 
-This project aims to detect depression in participants using the DAIC-WOZ dataset by analyzing emotional and semantic features extracted from interview transcripts. The project is divided into two main phases:
+This project is an AI-powered web application that allows users to answer a short questionnaire. Their responses are analyzed using NLP and machine learning models to **predict signs of depression and anxiety**. It's designed for early mental health screening, inspired by PHQ-8 and real-world conversational data.
 
-- **Phase 1**: Detect whether a participant is depressed (classification).
-- **Phase 2**: Predict the severity of depression only for depressed participants (regression).
+---
 
-## 📂 Project Structure
+## 📁 Project Structure
 
 ```
 
-anxiety-model/
-├── data/                  # Raw and preprocessed transcript data
-├── EDA/                   # Cleaned text, extracted features, visualizations
-├── model/                 # Notebooks and scripts for classification & regression
-├── docs/                  # Paper, charts, tables, reference materials
-├── venv/                  # Python virtual environment
-├── requirements.txt       # Project dependencies
-└── README.md              # You're here!
+Depression-Anxiety-Model-1/
+│
+├── frontend/                  ← Next.js frontend (React)
+│   └── app/                   ← Pages and components
+│       ├── page.js            ← Main UI with questionnaire + results
+│       └── components/        ← Reusable UI component (QuestionForm)
+│
+├── model/                     ← Python backend (FastAPI)
+│   ├── main.py                ← FastAPI app
+│   ├── predictor.py           ← Feature engineering + model prediction
+│   ├── depression\_model.pkl   ← Trained depression model (Random Forest)
+│   ├── anxiety\_model.pkl      ← Trained anxiety model (Voting Ensemble)
+│   ├── minmax\_scaler.pkl      ← Scaler for anxiety model
+│   ├── requirements.txt       ← Python dependencies
+│   ├── depression\_feature\_order.csv
+│   └── anxiety\_feature\_order.csv
+│
+├── EDA/                       ← Local exploratory data analysis
+├── data/                      ← Raw transcript data (not uploaded)
+└── README.md
 
 ````
 
-## ✅ Features Used
+---
 
-- **Linguistic & Emotional Features**: 15 features (e.g., sadness, fear, joy, nervousness, etc.)
-- **Semantic Sentence Embeddings**: 384-dimensional embeddings (from a transformer model)
-- **Target Variables**:
-  - `phq8_binary`: 0 = Not Depressed, 1 = Depressed (used for classification)
-  - `phq8_score`: Continuous PHQ-8 score (used for regression)
+## 💻 How It Works
 
-## 🔍 Project Workflow
+1. **User answers questions** (as free-text input)
+2. Text is combined into a single transcript
+3. Sent to backend via API
+4. Backend extracts:
+   - Empath emotional features
+   - Sentence embeddings (384-dim)
+   - Lexical features (word count, negations, etc.)
+5. Trained models predict:
+   - Depression (binary)
+   - Anxiety (only if depressed)
 
-### Phase 1: Depression Classification
-- Input: Emotional features + sentence embeddings
-- Output: Binary label (depressed or not)
-- Models: Logistic Regression, Random Forest, XGBoost, Neural Networks
-- Metrics: Accuracy, F1-score, ROC-AUC
+---
 
-### Phase 2: Depression Severity Estimation
-- Input: Features from **only depressed** participants
-- Output: PHQ-8 score (0–24)
-- Models: Ridge, Lasso, Gradient Boosting, Neural Networks
-- Metrics: MAE, RMSE, R²
+## 🧠 Models Used
 
-## 📌 Novelty
-- Applies a **two-stage pipeline**:
-  1. **Classify** depression status
-  2. **Predict** severity only for depressed participants
-- Focuses exclusively on **text modality** (no audio/video) for lightweight deployment
-- Future integration with **CBT-based therapy modules**
+| Task        | Model               |
+|-------------|---------------------|
+| Depression  | Random Forest       |
+| Anxiety     | Voting Classifier   |
+| Embeddings  | all-MiniLM-L6-v2 (sentence-transformers) |
+| Emotional Features | Empath         |
 
-## 📊 Tools & Technologies
+---
 
-- Python (Pandas, NumPy, Scikit-learn, XGBoost, Matplotlib, Seaborn)
-- Jupyter Notebooks
-- Pretrained transformer-based sentence embeddings
-- DAIC-WOZ dataset (transcripts only)
+## 🚀 Running the Project Locally
 
-## 🧪 Setup Instructions
+### 1. Backend (FastAPI)
+```bash
+cd model
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+uvicorn main:app --reload
+````
+
+This starts the API server at `http://127.0.0.1:8000`.
+
+### 2. Frontend (Next.js)
 
 ```bash
-git clone https://github.com/<your-username>/anxiety-model.git
-cd anxiety-model
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate (on Windows)
-pip install -r requirements.txt
-````
+cd frontend
+npm install
+npm run dev
+```
 
-## 📈 Future Work
-
-* Extend model for anxiety detection post depression classification
-* Use temporal patterns across sessions
-* Deploy a web-based mental health screening tool
+This starts the UI at `http://localhost:3000`.
 
 ---
 
-> ⚠️ **Ethics Note**: This project is for academic/research use only. It is not a substitute for clinical diagnosis or treatment.
+## 🌐 Deployment Plan
+
+* **Frontend:** [Vercel](https://vercel.com) — deploys the Next.js app
+* **Backend:** [Railway](https://railway.app) — deploys the FastAPI service
+  (`uvicorn main:app --host 0.0.0.0 --port $PORT`)
+
+Make sure to update the fetch URL in `frontend/app/page.js`:
+
+```js
+fetch("https://your-backend-url.onrailway.app/predict", ...)
+```
 
 ---
+
+## 📊 Dataset & Features
+
+* Based on real conversation-style **transcripts**
+* Extracted **399+ features**:
+
+  * Emotional categories (via Empath)
+  * 384-D sentence embeddings
+  * Lexical stats (hedges, negations, etc.)
+
+---
+
+## 📦 Dependencies
+
+* `fastapi`, `uvicorn`
+* `pandas`, `numpy`, `scikit-learn`
+* `empath`, `nltk`, `sentence-transformers`, `joblib`
+
+---
+
+## 📌 Future Improvements
+
+* Add severity scoring (PHQ-8 regression)
+* Improve response clarity and feedback
+* Build user account system
+* Switch to a more memory-efficient embedding model
+* Host both backend & frontend together (Docker or serverless)
+
+---
+
+## 🙌 Authors & Credits
+
+* **Avreet Kaur** — AI, backend & frontend
+* Built for submission to **Intel AI for Youth** 🧠🚀
+
+---
+
+> ⚠️ This tool is **not a medical diagnosis system**. It is intended for research and educational use only.
+
