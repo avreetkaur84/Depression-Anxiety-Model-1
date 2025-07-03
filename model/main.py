@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from model.predictor import predict_transcript
+from predictor import predict_transcript
 from fastapi.middleware.cors import CORSMiddleware
 
 import nltk
