@@ -3,6 +3,9 @@ from pydantic import BaseModel
 from model.predictor import predict_transcript
 from fastapi.middleware.cors import CORSMiddleware
 
+import nltk
+nltk.download('punkt')
+
 app = FastAPI()
 
 # ✅ Allow all origins (for React/Next frontend)
